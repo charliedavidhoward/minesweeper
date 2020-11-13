@@ -2,13 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 class Cell extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
-
   render() {
     return <div>Cell</div>;
   }
@@ -146,8 +139,24 @@ class Board extends React.Component {
     return cells;
   }
 
+  renderBoard(boardData) {
+    return boardData.map((row) => {
+      return boardData.map((cell) => {
+        return (
+          <div>
+            <Cell
+              value={cell}
+              onClick={() => this.handleClick(cell.x, cell.y)}
+            />
+            {row[row.length - 1] === cell ? <div className="board-row" /> : ""}
+          </div>
+        );
+      });
+    });
+  }
+
   render() {
-    return <div>Board</div>;
+    return <div>{this.renderBoard(this.state.boardData)}</div>;
   }
 }
 
