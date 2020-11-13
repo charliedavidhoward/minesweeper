@@ -2,6 +2,27 @@
 
 This is a implementation of the classic game 'Minesweeper' in React.
 
+## Game rules
+
+- The game starts with a grid of blank 'cells'. A user clicks on a cell to reveal the contents
+- If the cell contains a mine, the user loses the game
+- If the cell is empty, the cell reveals the number of adjacent cells that contain mines
+  (If there are no adjacent mines, then the empty cells are revealed recursively until cells
+  with at least one adjacent mine are revealed)
+- A user can place flags on cells (indicating where the user believes there are mines)
+- The user wins the game when all empty squares have been revealed, and no mines have been clicked on
+
+// TODO
+
+- Render the game board to the screen (we should be able to select variable sizes of board and
+  number of mines)
+- Create components (perhaps <Cell>, <Board>, and <Game>) and track the state of these
+- Generate the contents of the cells on render, with mines randomly placed
+- Handle clicks on the cell - reveal contents of cell - if a mine, end game and reveal board
+- Create a recursive function to display contents of cell if user clicks on a cell with no neighbouring mines
+- Handle right clicks (to place a flag)
+- The game should show the number of mines in the board for the user
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
