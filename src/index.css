@@ -1,0 +1,25 @@
+body {
+  font: sans-serif;
+  margin: 20px;
+}
+
+.board-row {
+  clear: both;
+  content: "";
+  /* display: table; */
+}
+
+.cell {
+  background: rgb(180, 172, 172);
+  border: 1px solid black;
+  float: left;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 5px;
+  height: 25px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 3px;
+  text-align: center;
+  width: 25px;
+}

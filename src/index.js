@@ -1,9 +1,31 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "./index.css";
 
 class Cell extends React.Component {
+  cellValue() {
+    if (!this.props.value.isRevealed) {
+      return this.props.value.isFlagged ? "🏁" : null;
+    }
+
+    if (this.props.value.isMine) {
+      return "💣";
+    }
+
+    if (this.props.value.neighbouringMines === 0) {
+      return null;
+    }
+
+    return this.props.value.neighbouringMines;
+  }
+
   render() {
-    return <div>Cell</div>;
+    console.log(this.props.value);
+    return (
+      <button className="cell" onClick={this.props.onClick}>
+        {this.cellValue()}
+      </button>
+    );
   }
 }
 
@@ -32,7 +54,7 @@ class Board extends React.Component {
           isMine: false,
           neighbouringMines: 0,
           isFlagged: false,
-          isRevealed: false,
+          isRevealed: true,
         };
       }
     }
@@ -43,7 +65,6 @@ class Board extends React.Component {
     // set the value for non-mine cells, how many neighbouring mines?
     boardData = this.findNeighbouringMines(boardData);
 
-    console.log(boardData);
     // return the initalised boardData to Board's state
     return boardData;
   }
@@ -141,7 +162,7 @@ class Board extends React.Component {
 
   renderBoard(boardData) {
     return boardData.map((row) => {
-      return boardData.map((cell) => {
+      return row.map((cell) => {
         return (
           <div>
             <Cell
@@ -166,7 +187,7 @@ class Game extends React.Component {
     this.state = {
       height: 20,
       width: 20,
-      mines: 25,
+      mines: 50,
     };
   }
 
