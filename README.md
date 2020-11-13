@@ -1,3 +1,7 @@
+# Minesweeper
+
+This is a implementation of the classic game 'Minesweeper' in React.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
