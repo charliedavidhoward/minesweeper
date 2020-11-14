@@ -9,7 +9,7 @@ class Cell extends React.Component {
     }
 
     if (this.props.value.isMine) {
-      return "💣";
+      return "💥";
     }
 
     if (this.props.value.neighbouringMines === 0) {
@@ -20,9 +20,14 @@ class Cell extends React.Component {
   }
 
   render() {
-    console.log(this.props.value);
+    let cellClassName = "cell" + (this.props.value.isRevealed ? "" : "-hidden");
+
     return (
-      <button className="cell" onClick={this.props.onClick}>
+      <button
+        className={cellClassName}
+        onClick={this.props.onClick}
+        onContextMenu={this.props.cMenu}
+      >
         {this.cellValue()}
       </button>
     );
@@ -54,7 +59,7 @@ class Board extends React.Component {
           isMine: false,
           neighbouringMines: 0,
           isFlagged: false,
-          isRevealed: true,
+          isRevealed: false,
         };
       }
     }
@@ -160,6 +165,106 @@ class Board extends React.Component {
     return cells;
   }
 
+  revealBoard() {
+    let updatedData = this.state.boardData;
+
+    for (let i = 0; i < this.props.height; i++) {
+      for (let j = 0; j < this.props.width; j++) {
+        if (!updatedData[i][j].isRevealed) {
+          updatedData[i][j].isRevealed = true;
+        }
+      }
+    }
+
+    this.setState({
+      boardData: updatedData,
+    });
+  }
+
+  // recursive function to reveal surrounding cells until finding a cell with at least
+  // one adjacent mine
+  revealNeighbours(x, y, boardData) {
+    // use neighbouringCells method to find neighbours of current cell
+    let neighbours = this.neighbouringCells(x, y, boardData);
+
+    neighbours.map((cell) => {
+      if (!cell.isRevealed && !cell.isMine) {
+        boardData[cell.x][cell.y].isRevealed = true;
+        if (cell.neighbouringMines === 0) {
+          this.revealNeighbours(cell.x, cell.y, boardData);
+        }
+      }
+    });
+
+    return boardData;
+  }
+
+  countHiddenCells(boardData) {
+    let hiddenCells = 0;
+    for (let i = 0; i < this.props.height; i++) {
+      for (let j = 0; j < this.props.width; j++) {
+        if (!boardData[i][j].isRevealed) {
+          hiddenCells++;
+        }
+      }
+    }
+    return hiddenCells;
+  }
+
+  handleClick(x, y) {
+    if (this.state.boardData[x][y].isRevealed) {
+      return null;
+    }
+
+    if (this.state.boardData[x][y].isMine) {
+      this.revealBoard();
+    }
+
+    let updatedData = this.state.boardData;
+
+    if (this.state.boardData[x][y].neighbouringMines !== 0) {
+      updatedData[x][y].isRevealed = true;
+    }
+
+    if (this.state.boardData[x][y].neighbouringMines === 0) {
+      updatedData = this.revealNeighbours(x, y, updatedData);
+    }
+
+    let winningState = false;
+
+    if (this.countHiddenCells(updatedData) === this.props.mines) {
+      this.revealBoard();
+      winningState = true;
+    }
+
+    this.setState({
+      boardData: updatedData,
+      gameWon: winningState,
+    });
+
+    // if right click, flag the cell
+  }
+
+  handleRightClick(e, x, y) {
+    e.preventDefault();
+
+    let updatedData = this.state.boardData;
+
+    if (updatedData[x][y].isRevealed) {
+      return;
+    }
+
+    if (updatedData[x][y].isFlagged) {
+      updatedData[x][y].isFlagged = false;
+    } else {
+      updatedData[x][y].isFlagged = true;
+    }
+
+    this.setState({
+      boardData: updatedData,
+    });
+  }
+
   renderBoard(boardData) {
     return boardData.map((row) => {
       return row.map((cell) => {
@@ -168,6 +273,7 @@ class Board extends React.Component {
             <Cell
               value={cell}
               onClick={() => this.handleClick(cell.x, cell.y)}
+              cMenu={(e) => this.handleRightClick(e, cell.x, cell.y)}
             />
             {row[row.length - 1] === cell ? <div className="board-row" /> : ""}
           </div>
@@ -177,7 +283,14 @@ class Board extends React.Component {
   }
 
   render() {
-    return <div>{this.renderBoard(this.state.boardData)}</div>;
+    return (
+      <div className="board">
+        <div className="status-info">
+          <p>{this.state.gameWon ? "You won!" : "Keep searching...."}</p>
+        </div>
+        <div>{this.renderBoard(this.state.boardData)}</div>
+      </div>
+    );
   }
 }
 
@@ -185,9 +298,9 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      height: 20,
-      width: 20,
-      mines: 50,
+      height: 30,
+      width: 30,
+      mines: 100,
     };
   }
 
