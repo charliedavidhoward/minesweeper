@@ -10,7 +10,7 @@ body {
 }
 
 .cell {
-  background: rgb(255, 0, 0);
+  background: rgb(189, 176, 176);
   border: 1px solid black;
   float: left;
   font-size: 12px;
