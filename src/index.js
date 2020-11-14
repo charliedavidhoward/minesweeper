@@ -257,8 +257,6 @@ class Board extends React.Component {
       boardData: updatedData,
       gameWon: winningState,
     });
-
-    // if right click, flag the cell
   }
 
   handleRightClick(e, x, y) {
@@ -325,6 +323,11 @@ class Game extends React.Component {
     return (
       <div className="game">
         <h1>Minesweeper Game</h1>
+        <p>Left-click to reveal cells - don't hit the mines!</p>
+        <p>
+          Numbers in revealed cells show how many mines are next to that cell
+        </p>
+        <p>Right click to add/remove flags</p>
         <p>Number of mines in the board: {mines}</p>
         <div className="game-board">
           <Board height={height} width={width} mines={mines} />
