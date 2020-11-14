@@ -2,6 +2,8 @@
 
 This is a implementation of the classic game 'Minesweeper' in React.
 
+[Deployment on Github pages] (https://charliedavidhoward.github.io/minesweeper/)
+
 ## Game rules
 
 - The game starts with a grid of blank 'cells'. A user clicks on a cell to reveal the contents
