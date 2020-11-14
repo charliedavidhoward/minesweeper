@@ -14,14 +14,11 @@ This is a implementation of the classic game 'Minesweeper' in React.
 
 // TODO
 
-- Render the game board to the screen (we should be able to select variable sizes of board and
-  number of mines)
-- Create components (perhaps <Cell>, <Board>, and <Game>) and track the state of these
-- Generate the contents of the cells on render, with mines randomly placed
-- Handle clicks on the cell - reveal contents of cell - if a mine, end game and reveal board
-- Create a recursive function to display contents of cell if user clicks on a cell with no neighbouring mines
-- Handle right clicks (to place a flag)
-- The game should show the number of mines in the board for the user
+- Allow player to restart the game without having to refresh
+- Add a timer and provide player with a score when game completes
+- Allow the user to select size of grid and number of mines (change difficulty)
+- At the moment the board doesn't render properly unless it is a square
+- The board doesn't respond well to resizing the screen
 
 # Getting Started with Create React App
 
