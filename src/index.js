@@ -322,7 +322,7 @@ class Game extends React.Component {
     const { height, width, mines } = this.state;
     return (
       <div className="game">
-        <h1>Minesweeper Game</h1>
+        <h1>Minesweeper Game!</h1>
         <p>Left-click to reveal cells - don't hit the mines!</p>
         <p>
           Numbers in revealed cells show how many mines are next to that cell
