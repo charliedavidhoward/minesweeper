@@ -242,6 +242,7 @@ class Board extends React.Component {
     // if the cell has no neighbouring cells, call the recursive
     // function to reveal cells until mines are hit
     if (this.state.boardData[x][y].neighbouringMines === 0) {
+      updatedData[x][y].isRevealed = true;
       updatedData = this.revealNeighbours(x, y, updatedData);
     }
 
