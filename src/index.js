@@ -26,7 +26,7 @@ class Cell extends React.Component {
       <button
         className={cellClassName}
         onClick={this.props.onClick}
-        onContextMenu={this.props.rightClick}
+        onContextMenu={this.props.onContextMenu}
       >
         {this.cellValue()}
       </button>
@@ -287,7 +287,7 @@ class Board extends React.Component {
             <Cell
               value={cell}
               onClick={() => this.handleClick(cell.x, cell.y)}
-              onRightClick={(e) => this.handleRightClick(e, cell.x, cell.y)}
+              onContextMenu={(e) => this.handleRightClick(e, cell.x, cell.y)}
             />
             {row[row.length - 1] === cell ? <div className="board-row" /> : ""}
           </div>
