@@ -26,7 +26,7 @@ class Cell extends React.Component {
       <button
         className={cellClassName}
         onClick={this.props.onClick}
-        onContextMenu={this.props.cMenu}
+        onContextMenu={this.props.rightClick}
       >
         {this.cellValue()}
       </button>
@@ -50,6 +50,8 @@ class Board extends React.Component {
   initialiseBoard(height, width, mines) {
     let boardData = [];
 
+    //  initialise the state for each cell
+    //  x, y are the coordinates of the cell in the board
     for (let i = 0; i < height; i++) {
       boardData.push([]);
       for (let j = 0; j < width; j++) {
@@ -83,6 +85,8 @@ class Board extends React.Component {
       randomX = Math.floor(Math.random() * this.props.width);
       randomY = Math.floor(Math.random() * this.props.height);
 
+      // if the cell does not already contain a mine, place
+      // a mine, otherwise skip and continue to loop
       if (!boardData[randomY][randomX].isMine) {
         boardData[randomY][randomX].isMine = true;
         minesSet++;
@@ -94,6 +98,8 @@ class Board extends React.Component {
   findNeighbouringMines(boardData) {
     for (let i = 0; i < this.props.height; i++) {
       for (let j = 0; j < this.props.width; j++) {
+        // if the cell is not a mine, identify how many neighbours
+        // are mines
         if (!boardData[i][j].isMine) {
           let neighbouringMines = 0;
           const neighbouringCells = this.neighbouringCells(
@@ -121,6 +127,9 @@ class Board extends React.Component {
 
     const height = this.props.height;
     const width = this.props.width;
+
+    // the following statements ensure that we do
+    // not look outside the array
 
     // to the left
     if (x > 0) {
@@ -181,10 +190,10 @@ class Board extends React.Component {
     });
   }
 
-  // recursive function to reveal surrounding cells until finding a cell with at least
-  // one adjacent mine
   revealNeighbours(x, y, boardData) {
-    // use neighbouringCells method to find neighbours of current cell
+    // recursive function to reveal surrounding cells until finding a cell with
+    // at least one adjacent mine
+
     let neighbours = this.neighbouringCells(x, y, boardData);
 
     neighbours.map((cell) => {
@@ -212,26 +221,33 @@ class Board extends React.Component {
   }
 
   handleClick(x, y) {
+    // if the square is already revealed, a click does nothing
     if (this.state.boardData[x][y].isRevealed) {
       return null;
     }
 
+    // if the player clicks on a mine, the game is over and the board is revealed
     if (this.state.boardData[x][y].isMine) {
       this.revealBoard();
     }
 
     let updatedData = this.state.boardData;
 
+    // if there is at least one neighbouring mine, reveal the cell
+    // (this will show a number in the cell)
     if (this.state.boardData[x][y].neighbouringMines !== 0) {
       updatedData[x][y].isRevealed = true;
     }
 
+    // if the cell has no neighbouring cells, call the recursive
+    // function to reveal cells until mines are hit
     if (this.state.boardData[x][y].neighbouringMines === 0) {
       updatedData = this.revealNeighbours(x, y, updatedData);
     }
 
     let winningState = false;
 
+    // if the only hidden cells are mines, the game is won
     if (this.countHiddenCells(updatedData) === this.props.mines) {
       this.revealBoard();
       winningState = true;
@@ -273,7 +289,7 @@ class Board extends React.Component {
             <Cell
               value={cell}
               onClick={() => this.handleClick(cell.x, cell.y)}
-              cMenu={(e) => this.handleRightClick(e, cell.x, cell.y)}
+              onRightClick={(e) => this.handleRightClick(e, cell.x, cell.y)}
             />
             {row[row.length - 1] === cell ? <div className="board-row" /> : ""}
           </div>
@@ -298,9 +314,9 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      height: 30,
-      width: 30,
-      mines: 100,
+      height: 11,
+      width: 11,
+      mines: 15,
     };
   }
 

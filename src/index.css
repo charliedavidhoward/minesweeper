@@ -6,7 +6,7 @@ body {
 .board-row {
   clear: both;
   content: "";
-  /* display: table; */
+  position: static;
 }
 
 .cell {
